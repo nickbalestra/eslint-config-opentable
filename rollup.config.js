@@ -2,6 +2,7 @@ import babel from 'rollup-plugin-babel';
 import uglify from 'rollup-plugin-uglify';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import replace from 'rollup-plugin-replace';
 
 const plugins = [ babel({
     babelrc: false,
@@ -13,6 +14,8 @@ const plugins = [ babel({
     main: true
 }), commonjs({
     include: 'node_modules/**'
+}), replace({
+    'typeof exports === "object" && typeof module === "object"': true
 }) ];
 
 if (process.env.NODE_ENV === 'production') {
