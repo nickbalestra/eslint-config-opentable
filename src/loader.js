@@ -15,21 +15,19 @@ export function parallel(libs, callback) {
 
     let remaining = libs.length;
 
-    if (!remaining) {
-        return callback();
-    }
+    if (!remaining) callback(); else {
+        let done = false;
 
-    let done = false;
+        for (let i = 0; i < libs.length; i++) {
+            callLoader(libs[i], (err) => {
+                remaining--;
 
-    for (let i = 0; i < libs.length; i++) {
-        callLoader(libs[i], (err) => {
-            remaining--;
-
-            if (!done && (err || !remaining)) {
-                done = true;
-                callback(err);
-            }
-        });
+                if (!done && (err || !remaining)) {
+                    done = true;
+                    callback(err);
+                }
+            });
+        }
     }
 }
 
@@ -38,20 +36,18 @@ export function load(libs, callback) {
 
     // Load function and recursively call next function.
     function loadLib(idx) {
-        if (idx >= libs.length) {
-            return callback();
+        if (idx >= libs.length) callback(); else {
+
+            // Load this lib.
+            callLoader(libs[idx], (err) => {
+                // Short circuit if error.
+                if (err) callback(err); else {
+
+                    // Recursively go for next.
+                    loadLib(idx + 1);
+                }
+            });
         }
-
-        // Load this lib.
-        callLoader(libs[idx], (err) => {
-            // Short circuit if error.
-            if (err) {
-                return callback(err);
-            }
-
-            // Recursively go for next.
-            loadLib(idx + 1);
-        });
     }
 
     // Start at first lib index.
