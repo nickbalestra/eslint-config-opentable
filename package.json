@@ -30,6 +30,6 @@
     "rollup-plugin-uglify": "^1.0.1"
   },
   "dependencies": {
-    "little-loader": "0.1.1"
+    "little-loader": "0.2.0"
   }
 }

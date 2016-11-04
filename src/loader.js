@@ -2,18 +2,27 @@ import lloader from 'little-loader';
 
 function noop() { }
 
+function callLoader(src, callback) {
+    if (typeof src === 'string') {
+        lloader(src, callback);
+    } else {
+        lloader(src.src, { callback, setup: (script) => script.crossOrigin = src.crossOrigin });
+    }
+}
+
 export function parallel(libs, callback) {
     callback = callback || noop;
 
-    if (!libs.length) {
+    let remaining = libs.length;
+
+    if (!remaining) {
         return callback();
     }
 
-    let remaining = libs.length;
     let done = false;
 
     for (let i = 0; i < libs.length; i++) {
-        lloader(libs[i], (err) => {
+        callLoader(libs[i], (err) => {
             remaining--;
 
             if (!done && (err || !remaining)) {
@@ -34,7 +43,7 @@ export function load(libs, callback) {
         }
 
         // Load this lib.
-        lloader(libs[idx], (err) => {
+        callLoader(libs[idx], (err) => {
             // Short circuit if error.
             if (err) {
                 return callback(err);
