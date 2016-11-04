@@ -1,6 +1,6 @@
 {
   "name": "ot-script-loader",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "main": "lib/loader.js",
   "scripts": {
