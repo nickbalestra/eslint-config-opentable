@@ -1,14 +1,8 @@
-import babel from 'rollup-plugin-babel';
 import uglify from 'rollup-plugin-uglify';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 
-const plugins = [ babel({
-    babelrc: false,
-    presets: [['es2015', { modules: false, loose: true }]],
-    plugins: ['external-helpers'],
-    exclude: 'node_modules/**'
-}), nodeResolve({
+const plugins = [ nodeResolve({
     jsnext: true,
     main: true
 }), commonjs({
