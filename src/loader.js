@@ -1,12 +1,12 @@
 import lloader from 'little-loader';
 
-function callLoader(src, callback) {
-    if (typeof src === 'string') {
-        lloader(src, callback);
-    } else lloader(src.src, {
-        callback: callback,
+export function load(src, callback) {
+    if (typeof src === 'string') lloader(src, callback); else lloader(src.src, {
+        callback: src.callback || callback,
 
-        setup: function(script) { script.crossOrigin = src.crossOrigin; }
+        setup: function(script) {
+            script.crossOrigin = src.crossOrigin;
+        }
     });
 }
 
@@ -19,7 +19,7 @@ export function parallel(libs, callback) {
         var done = false;
 
         for (var i = 0; i < libs.length; i++) {
-            callLoader(libs[i], function(err) {
+            load(libs[i], function(err) {
                 remaining--;
 
                 if (!done && (err || !remaining)) {
@@ -30,5 +30,3 @@ export function parallel(libs, callback) {
         }
     }
 }
-
-export { lloader as load };
