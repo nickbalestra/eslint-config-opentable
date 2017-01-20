@@ -2,7 +2,7 @@ import lloader from 'little-loader';
 
 export function load(src, callback) {
     if (typeof src === 'string') lloader(src, callback); else lloader(src.src, {
-        callback: src.callback || callback,
+        callback: callback || src.callback,
 
         setup: function(script) {
             script.crossOrigin = src.crossOrigin;
